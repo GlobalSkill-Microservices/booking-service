@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/booking")
-@CrossOrigin("*")
 @SecurityRequirement(name = "api")
 public class BookingController {
 
