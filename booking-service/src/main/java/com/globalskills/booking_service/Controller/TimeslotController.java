@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/timeslot")
-@CrossOrigin("*")
 @SecurityRequirement(name = "api")
 public class TimeslotController {
 
