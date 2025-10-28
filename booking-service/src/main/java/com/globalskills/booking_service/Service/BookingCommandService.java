@@ -44,8 +44,8 @@ public class BookingCommandService {
 
     public BookingResponse create(BookingRequest request,Long accountId){
         Timeslot timeslot = timeslotQueryService.findById(request.getTimeslotId());
-        if(timeslot.getSlotStatus() != null){
-            throw new TimeslotException("Cant booking this slot, already: + status", HttpStatus.BAD_REQUEST);
+        if(timeslot.getSlotStatus() != SlotStatus.AVAILABLE){
+            throw new TimeslotException("Cant booking this slot, already: "+ timeslot.getSlotStatus(), HttpStatus.BAD_REQUEST);
         }
         Booking booking = new Booking();
         booking.setMentorId(request.getMentorId());
