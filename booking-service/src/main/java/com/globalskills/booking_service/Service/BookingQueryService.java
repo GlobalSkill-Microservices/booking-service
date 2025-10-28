@@ -1,5 +1,6 @@
 package com.globalskills.booking_service.Service;
 
+import com.globalskills.booking_service.Common.AccountDto;
 import com.globalskills.booking_service.Common.PageResponse;
 import com.globalskills.booking_service.Dto.BookingResponse;
 import com.globalskills.booking_service.Dto.TimeslotResponse;
@@ -8,6 +9,7 @@ import com.globalskills.booking_service.Entity.Timeslot;
 import com.globalskills.booking_service.Enum.BookingStatus;
 import com.globalskills.booking_service.Exception.BookingException;
 import com.globalskills.booking_service.Repository.BookingRepo;
+import com.globalskills.booking_service.Service.CLient.AccountClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +18,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingQueryService {
@@ -30,16 +36,35 @@ public class BookingQueryService {
     @Autowired
     TimeslotQueryService timeslotQueryService;
 
+    @Autowired
+    AccountClientService accountClientService;
+
     public Booking findById(Long id){
         return bookingRepo.findById(id).orElseThrow(()-> new BookingException("Cant found booking", HttpStatus.NOT_FOUND));
     }
 
-    public BookingResponse getBookingById(Long id){
+    public BookingResponse getBookingById(Long id) {
+
         Booking booking = findById(id);
+
         Timeslot timeslot = timeslotQueryService.findById(booking.getTimeslot().getId());
+
+        List<Long> accountIds = List.of(booking.getMentorId(), booking.getAccountId());
+
+        Map<Long, AccountDto> accountMap = accountClientService.getAccountMapByIds(accountIds);
+
         BookingResponse bookingResponse = modelMapper.map(booking, BookingResponse.class);
+
+        bookingResponse.setMentorId(accountMap.get(booking.getMentorId()));
+
+        bookingResponse.setUserId(accountMap.get(booking.getAccountId()));
+
         TimeslotResponse timeslotResponse = modelMapper.map(timeslot, TimeslotResponse.class);
+
+        timeslotResponse.setMentorId(accountMap.get(booking.getMentorId()));
+
         bookingResponse.setTimeslotResponse(timeslotResponse);
+
         return bookingResponse;
     }
 
@@ -55,7 +80,14 @@ public class BookingQueryService {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(direction, sortBy));
         Page<Booking> bookingPage = bookingRepo.findAllByAccountIdAndBookingStatus(pageRequest,accountId,bookingStatus);
         if(bookingPage.isEmpty()){
-            return null;
+            return new PageResponse<>(
+                    Collections.emptyList(),
+                    page,
+                    size,
+                    0,
+                    0,
+                    true
+            );
         }
         List<BookingResponse> responses = bookingPage
                 .stream()

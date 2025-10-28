@@ -17,17 +17,24 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Timeslot {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     LocalDate slotDate;
+
     LocalTime startTime;
+
     LocalTime endTime;
+
     Long accountId;
+
     @Enumerated(EnumType.STRING)
     SlotStatus slotStatus;
 
     Long roomId;
+
     String linkUrlRoom;
 
     @OneToOne(mappedBy = "timeslot", fetch = FetchType.LAZY)
