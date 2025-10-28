@@ -1,11 +1,14 @@
 package com.globalskills.booking_service.Service;
 
+import com.globalskills.booking_service.Common.AccountDto;
 import com.globalskills.booking_service.Dto.TimeslotRequest;
 import com.globalskills.booking_service.Dto.TimeslotResponse;
 import com.globalskills.booking_service.Entity.Calendar;
 import com.globalskills.booking_service.Entity.Timeslot;
+import com.globalskills.booking_service.Enum.SlotStatus;
 import com.globalskills.booking_service.Exception.TimeslotException;
 import com.globalskills.booking_service.Repository.TimeslotRepo;
+import com.globalskills.booking_service.Service.CLient.AccountClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,23 +30,39 @@ public class TimeslotCommandService {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    AccountClientService accountClientService;
+
     public TimeslotResponse createByTeacher(Long accountId, TimeslotRequest request){
         Timeslot timeslot = modelMapper.map(request,Timeslot.class);
         Calendar calendar = calendarQueryService.findByAccountId(accountId);
-        //set timeslot status
+        timeslot.setRoomId(request.getRoomId());
+        timeslot.setLinkUrlRoom(request.getLinkUrlRoom());
+        timeslot.setSlotStatus(SlotStatus.AVAILABLE);
         timeslot.setCalendar(calendar);
         timeslot.setAccountId(accountId);
         timeslotRepo.save(timeslot);
-        return modelMapper.map(timeslot, TimeslotResponse.class);
+
+        AccountDto mentor = accountClientService.fetchAccount(accountId);
+        TimeslotResponse response = modelMapper.map(timeslot, TimeslotResponse.class);
+        response.setMentorId(mentor);
+
+        return response;
     }
 
     public TimeslotResponse updateByTeacher(Long id, TimeslotRequest request){
         Timeslot oldTimeslot = timeslotQueryService.findById(id);
+        oldTimeslot.setRoomId(request.getRoomId());
+        oldTimeslot.setLinkUrlRoom(request.getLinkUrlRoom());
         oldTimeslot.setSlotDate(request.getSlotDate());
         oldTimeslot.setStartTime(request.getStartTime());
         oldTimeslot.setEndTime(request.getEndTime());
         timeslotRepo.save(oldTimeslot);
-        return modelMapper.map(oldTimeslot, TimeslotResponse.class);
+
+        AccountDto mentor = accountClientService.fetchAccount(oldTimeslot.getAccountId());
+        TimeslotResponse response = modelMapper.map(oldTimeslot, TimeslotResponse.class);
+        response.setMentorId(mentor);
+        return response;
     }
 
     @Transactional

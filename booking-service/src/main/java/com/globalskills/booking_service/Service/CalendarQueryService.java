@@ -1,5 +1,6 @@
 package com.globalskills.booking_service.Service;
 
+import com.globalskills.booking_service.Common.AccountDto;
 import com.globalskills.booking_service.Common.PageResponse;
 import com.globalskills.booking_service.Dto.CalendarResponse;
 import com.globalskills.booking_service.Dto.TimeslotResponse;
@@ -8,6 +9,7 @@ import com.globalskills.booking_service.Entity.Calendar;
 import com.globalskills.booking_service.Entity.Timeslot;
 import com.globalskills.booking_service.Exception.CalendarException;
 import com.globalskills.booking_service.Repository.CalendarRepo;
+import com.globalskills.booking_service.Service.CLient.AccountClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +38,9 @@ public class CalendarQueryService {
     @Autowired
     CalendarRepo calendarRepo;
 
+    @Autowired
+    AccountClientService accountClientService;
+
 
     public Calendar findById(Long id){
         return calendarRepo.findById(id).orElseThrow(()->new CalendarException("Cant found", HttpStatus.BAD_REQUEST));
@@ -53,6 +58,8 @@ public class CalendarQueryService {
             Long accountId){
 
         Calendar calendar = findByAccountId(accountId);
+
+        AccountDto ownerId = accountClientService.fetchAccount(accountId);
 
         PageResponse<TimeslotResponse> timeslotPage = timeslotQueryService.getAllByAccountId(page, size, sortBy, sortDir, accountId);
 
@@ -91,6 +98,7 @@ public class CalendarQueryService {
 
         CalendarResponse calendarResponse = modelMapper.map(calendar, CalendarResponse.class);
         calendarResponse.setWeekSlotResponses(weekSlotResponses);
+        calendarResponse.setOwnerId(ownerId);
 
         return new PageResponse<>(
                 List.of(calendarResponse),

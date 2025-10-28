@@ -1,5 +1,6 @@
 package com.globalskills.booking_service.Dto;
 
+import com.globalskills.booking_service.Common.AccountDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,15 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TimeslotRequest {
+
     LocalDate slotDate;
+
     LocalTime startTime;
+
     LocalTime endTime;
+
+    Long roomId;
+
+    String linkUrlRoom;
+
 }

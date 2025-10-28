@@ -1,24 +1,18 @@
-package com.globalskills.booking_service.Dto;
+package com.globalskills.booking_service.Common;
 
-import com.globalskills.booking_service.Common.AccountDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CalendarResponse {
-
+public class AccountDto {
     Long id;
-
-    AccountDto ownerId;
-
-    List<WeekSlotResponse> weekSlotResponses;
-
+    String username;
+    String fullName;
+    String avatarUrl;
 }

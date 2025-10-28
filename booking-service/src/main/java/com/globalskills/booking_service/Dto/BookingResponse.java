@@ -1,5 +1,6 @@
 package com.globalskills.booking_service.Dto;
 
+import com.globalskills.booking_service.Common.AccountDto;
 import com.globalskills.booking_service.Enum.BookingStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,9 +15,9 @@ import lombok.experimental.FieldDefaults;
 public class BookingResponse {
     Long id;
 
-    Long mentorId;
+    AccountDto mentorId;
 
-    Long userId;
+    AccountDto userId;
 
     BookingStatus bookingStatus;
 
