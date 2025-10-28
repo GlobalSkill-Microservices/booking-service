@@ -41,7 +41,7 @@ public class CalendarController {
             @RequestHeader(value = "X-User-ID",required = false) Long accountId
     ){
         PageResponse<CalendarResponse> response = calendarQueryService.getByCurrentAccount(page, size, sortBy, sortDir, accountId);
-        BaseResponseAPI<PageResponse<CalendarResponse>> responseAPI = new BaseResponseAPI<>(true,"Get calendar successfully",null,null);
+        BaseResponseAPI<PageResponse<CalendarResponse>> responseAPI = new BaseResponseAPI<>(true,"Get calendar successfully",response,null);
         return ResponseEntity.ok(responseAPI);
     }
 }
