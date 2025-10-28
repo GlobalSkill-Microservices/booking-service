@@ -22,8 +22,6 @@ public class TimeslotRequest {
 
     LocalTime endTime;
 
-    Long roomId;
-
     String linkUrlRoom;
 
 }
