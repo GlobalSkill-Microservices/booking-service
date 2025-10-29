@@ -12,9 +12,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WeekSlotResponse {
+public class WeekSlotResponse implements Comparable<WeekSlotResponse>{
     Integer week;
     Integer month;
     Integer year;
     List<TimeslotResponse> timeslotResponses;
+
+    @Override
+    public int compareTo(WeekSlotResponse other) {
+        int yearCompare = this.year.compareTo(other.year);
+        if (yearCompare != 0) return yearCompare;
+
+        int monthCompare = this.month.compareTo(other.month);
+        if (monthCompare != 0) return monthCompare;
+
+        return this.week.compareTo(other.week);
+    }
+
 }
