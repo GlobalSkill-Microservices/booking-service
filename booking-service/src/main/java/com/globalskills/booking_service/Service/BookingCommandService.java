@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Book;
 import java.util.List;
 import java.util.Map;
 
@@ -68,12 +69,21 @@ public class BookingCommandService {
         return bookingResponse;
     }
 
-    public void update(BookingRequest request,Long accountId){
+    public boolean updateBookingStatus(Long accountId,Long timeslotId){
+        Booking booking = bookingRepo.findByAccountIdAndTimeslotId(accountId,timeslotId);
+        if(booking != null){
+            booking.setBookingStatus(BookingStatus.CONFIRMED);
+            bookingRepo.save(booking);
+            return true;
+        }
+        return false;
     }
 
     @Transactional
     public void delete(Long id){
         Booking booking = bookingQueryService.findById(id);
     }
+
+
 
 }

@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingQueryService {
@@ -68,7 +66,7 @@ public class BookingQueryService {
         return bookingResponse;
     }
 
-    public PageResponse<BookingResponse> getAllBCurrentUser(
+    public PageResponse<BookingResponse> getAllByCurrentUser(
             int page,
             int size,
             String sortBy,
@@ -101,6 +99,16 @@ public class BookingQueryService {
                 bookingPage.getTotalPages(),
                 bookingPage.isLast()
         );
+    }
+
+    public BookingResponse getByCurrentTeacher(
+            Long accountId,
+            Long timeslotId,
+            BookingStatus bookingStatus
+    ){
+        Booking booking = bookingRepo.findByMentorIdAndTimeslotIdAndBookingStatus(accountId,timeslotId,bookingStatus);
+
+        return getBookingById(booking.getId());
     }
 
 }
