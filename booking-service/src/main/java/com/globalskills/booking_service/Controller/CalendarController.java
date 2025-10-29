@@ -40,7 +40,21 @@ public class CalendarController {
             @Parameter(hidden = true)
             @RequestHeader(value = "X-User-ID",required = false) Long accountId
     ){
-        PageResponse<CalendarResponse> response = calendarQueryService.getByCurrentAccount(page, size, sortBy, sortDir, accountId);
+        PageResponse<CalendarResponse> response = calendarQueryService.getbyAccount(page, size, sortBy, sortDir, accountId);
+        BaseResponseAPI<PageResponse<CalendarResponse>> responseAPI = new BaseResponseAPI<>(true,"Get calendar successfully",response,null);
+        return ResponseEntity.ok(responseAPI);
+    }
+
+
+    @GetMapping("/all/{accountId}")
+    public ResponseEntity<?> getByAccountId(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir,
+            @PathVariable Long accountId
+    ){
+        PageResponse<CalendarResponse> response = calendarQueryService.getbyAccount(page, size, sortBy, sortDir, accountId);
         BaseResponseAPI<PageResponse<CalendarResponse>> responseAPI = new BaseResponseAPI<>(true,"Get calendar successfully",response,null);
         return ResponseEntity.ok(responseAPI);
     }

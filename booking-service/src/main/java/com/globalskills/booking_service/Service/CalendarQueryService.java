@@ -6,15 +6,11 @@ import com.globalskills.booking_service.Dto.CalendarResponse;
 import com.globalskills.booking_service.Dto.TimeslotResponse;
 import com.globalskills.booking_service.Dto.WeekSlotResponse;
 import com.globalskills.booking_service.Entity.Calendar;
-import com.globalskills.booking_service.Entity.Timeslot;
 import com.globalskills.booking_service.Exception.CalendarException;
 import com.globalskills.booking_service.Repository.CalendarRepo;
 import com.globalskills.booking_service.Service.CLient.AccountClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +46,7 @@ public class CalendarQueryService {
         return calendarRepo.findByOwnerId(accountId).orElseThrow(()-> new CalendarException("Cant found calendar with owner id: " + accountId,HttpStatus.NOT_FOUND));
     }
 
-    public PageResponse<CalendarResponse> getByCurrentAccount(
+    public PageResponse<CalendarResponse> getbyAccount(
             int page,
             int size,
             String sortBy,
