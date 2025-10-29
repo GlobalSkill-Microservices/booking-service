@@ -49,13 +49,34 @@ public class BookingController {
             @RequestParam(defaultValue = "desc") String sortDir,
             @Parameter(hidden = true)
             @RequestHeader(value = "X-User-ID",required = false) Long accountId,
-            @RequestParam(required = false)BookingStatus bookingStatus
+            @RequestParam(required = true)BookingStatus bookingStatus
             ){
-        PageResponse<BookingResponse> response = bookingQueryService.getAllBCurrentUser(page, size, sortBy, sortDir, accountId, bookingStatus);
+        PageResponse<BookingResponse> response = bookingQueryService.getAllByCurrentUser(page, size, sortBy, sortDir, accountId, bookingStatus);
         BaseResponseAPI<PageResponse<BookingResponse>> responseAPI = new BaseResponseAPI<>(true,"Get all booking with status: "+ bookingStatus + " successfully",response,null);
         return ResponseEntity.ok(responseAPI);
 
     }
 
+    @GetMapping("/current-teacher/{timeslotId}")
+    public ResponseEntity<?> getByCurrentTeacher(
+            @Parameter(hidden = true)
+            @RequestHeader(value = "X-User-ID",required = false) Long accountId,
+            @PathVariable Long timeslotId,
+            @RequestParam(required = true)BookingStatus bookingStatus
+    ){
+        BookingResponse response = bookingQueryService.getByCurrentTeacher(accountId,timeslotId,bookingStatus);
+        BaseResponseAPI<BookingResponse> responseAPI = new BaseResponseAPI<>(true,"Get student booked with status: "+ bookingStatus + " successfully",response,null);
+        return ResponseEntity.ok(responseAPI);
+    }
+
+    @PostMapping("/booking-status/timeslot/{timeslotId}")
+    public ResponseEntity<?> WebHookReturnStatus(
+            @Parameter(hidden = true)
+            @RequestHeader(value = "X-User-ID",required = false) Long accountId,
+            @PathVariable Long timeslotId
+    ){
+        boolean response = bookingCommandService.updateBookingStatus(accountId, timeslotId);
+        return ResponseEntity.ok(response);
+    }
 
 }

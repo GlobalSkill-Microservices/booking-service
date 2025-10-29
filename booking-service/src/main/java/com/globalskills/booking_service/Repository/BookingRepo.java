@@ -10,4 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookingRepo extends JpaRepository<Booking,Long> {
     Page<Booking> findAllByAccountIdAndBookingStatus(PageRequest pageRequest, Long accountId, BookingStatus bookingStatus);
+
+    Booking findByMentorIdAndTimeslotIdAndBookingStatus(Long accountId,Long timeslotId,BookingStatus bookingStatus);
+
+    Booking findByAccountIdAndTimeslotId(Long accountId, Long timeslotId);
 }
