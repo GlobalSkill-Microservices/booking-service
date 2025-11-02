@@ -4,6 +4,7 @@ import com.globalskills.booking_service.Common.AccountDto;
 import com.globalskills.booking_service.Dto.BookingRequest;
 import com.globalskills.booking_service.Dto.BookingResponse;
 import com.globalskills.booking_service.Dto.TimeslotResponse;
+import com.globalskills.booking_service.Dto.WebHookRequest;
 import com.globalskills.booking_service.Entity.Booking;
 import com.globalskills.booking_service.Entity.Timeslot;
 import com.globalskills.booking_service.Enum.BookingStatus;
@@ -69,8 +70,8 @@ public class BookingCommandService {
         return bookingResponse;
     }
 
-    public boolean updateBookingStatus(Long accountId,Long timeslotId){
-        Booking booking = bookingRepo.findByAccountIdAndTimeslotId(accountId,timeslotId);
+    public boolean updateBookingStatus(WebHookRequest request){
+        Booking booking = bookingQueryService.findById(request.getBookingId());
         if(booking != null){
             booking.setBookingStatus(BookingStatus.CONFIRMED);
             bookingRepo.save(booking);
