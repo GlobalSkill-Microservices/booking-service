@@ -69,14 +69,4 @@ public class BookingController {
         return ResponseEntity.ok(responseAPI);
     }
 
-    @PostMapping("/booking-status/timeslot/{timeslotId}")
-    public ResponseEntity<?> WebHookReturnStatus(
-            @Parameter(hidden = true)
-            @RequestHeader(value = "X-User-ID",required = false) Long accountId,
-            @PathVariable Long timeslotId
-    ){
-        boolean response = bookingCommandService.updateBookingStatus(accountId, timeslotId);
-        return ResponseEntity.ok(response);
-    }
-
 }
