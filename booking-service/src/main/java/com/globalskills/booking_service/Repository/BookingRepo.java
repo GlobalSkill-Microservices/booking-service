@@ -21,18 +21,15 @@ public interface BookingRepo extends JpaRepository<Booking,Long> {
 
     Booking findByAccountIdAndTimeslotId(Long accountId, Long timeslotId);
 
-    @Query(
-            value = """
-            SELECT 
-                b.mentor_id AS mentorId, 
-                COUNT(*) AS confirmedCount
-            FROM bookings b
-            WHERE b.booking_status = 'CONFIRMED'
-            GROUP BY b.mentor_id
-            ORDER BY confirmedCount DESC
-            LIMIT :limit
-            """,
-            nativeQuery = true
-    )
+    @Query(value = """
+    SELECT b.mentor_id AS mentorId,
+           COUNT(*) AS confirmedCount
+    FROM bookings b
+    WHERE b.booking_status = 'CONFIRMED'
+    GROUP BY b.mentor_id
+    ORDER BY confirmedCount DESC
+    LIMIT :limit
+""", nativeQuery = true)
     List<TopMentorProjection> findTopMentors(@Param("limit") int limit);
+
 }
