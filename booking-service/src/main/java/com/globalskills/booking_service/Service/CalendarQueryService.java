@@ -46,7 +46,7 @@ public class CalendarQueryService {
         return calendarRepo.findByOwnerId(accountId).orElseThrow(()-> new CalendarException("Cant found calendar with owner id: " + accountId,HttpStatus.NOT_FOUND));
     }
 
-    public PageResponse<CalendarResponse> getbyAccount(
+    public PageResponse<CalendarResponse> getByAccount(
             int page,
             int size,
             String sortBy,

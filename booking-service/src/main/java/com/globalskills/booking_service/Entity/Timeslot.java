@@ -22,6 +22,10 @@ public class Timeslot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    String language;
+
+    String title;
+
     LocalDate slotDate;
 
     LocalTime startTime;

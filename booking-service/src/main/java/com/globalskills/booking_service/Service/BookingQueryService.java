@@ -2,6 +2,8 @@ package com.globalskills.booking_service.Service;
 
 import com.globalskills.booking_service.Common.AccountDto;
 import com.globalskills.booking_service.Common.PageResponse;
+import com.globalskills.booking_service.Common.TopMentorProjection;
+import com.globalskills.booking_service.Common.TopMentorResponse;
 import com.globalskills.booking_service.Dto.BookingResponse;
 import com.globalskills.booking_service.Dto.TimeslotResponse;
 import com.globalskills.booking_service.Entity.Booking;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingQueryService {
@@ -110,5 +114,39 @@ public class BookingQueryService {
 
         return getBookingById(booking.getId());
     }
+
+
+    public List<TopMentorResponse> getTopMentors(int limit) {
+
+        List<TopMentorProjection> mentors = bookingRepo.findTopMentors(limit);
+
+        List<Long> accountIds = mentors.stream()
+                .map(TopMentorProjection::getMentorId)
+                .distinct()
+                .toList();
+
+        List<AccountDto> accountDtos = accountClientService.fetchListAccount(accountIds);
+
+        Map<Long, AccountDto> accountMap = accountDtos.stream()
+                .collect(Collectors.toMap(AccountDto::getId, dto -> dto));
+
+        List<TopMentorResponse> response = mentors.stream()
+                .map(m -> {
+                    AccountDto dto = accountMap.get(m.getMentorId());
+                    if (dto == null) return null;
+                    return new TopMentorResponse(
+                            dto.getId(),
+                            dto.getUsername(),
+                            dto.getFullName(),
+                            dto.getAvatarUrl(),
+                            m.getConfirmedCount()
+                    );
+                })
+                .filter(Objects::nonNull)
+                .toList();
+
+        return response;
+    }
+
 
 }

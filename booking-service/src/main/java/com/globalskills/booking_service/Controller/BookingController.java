@@ -2,6 +2,8 @@ package com.globalskills.booking_service.Controller;
 
 import com.globalskills.booking_service.Common.BaseResponseAPI;
 import com.globalskills.booking_service.Common.PageResponse;
+import com.globalskills.booking_service.Common.TopMentorProjection;
+import com.globalskills.booking_service.Common.TopMentorResponse;
 import com.globalskills.booking_service.Dto.BookingRequest;
 import com.globalskills.booking_service.Dto.BookingResponse;
 import com.globalskills.booking_service.Enum.BookingStatus;
@@ -12,6 +14,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/booking")
@@ -66,6 +70,13 @@ public class BookingController {
     ){
         BookingResponse response = bookingQueryService.getByCurrentTeacher(accountId,timeslotId,bookingStatus);
         BaseResponseAPI<BookingResponse> responseAPI = new BaseResponseAPI<>(true,"Get student booked with status: "+ bookingStatus + " successfully",response,null);
+        return ResponseEntity.ok(responseAPI);
+    }
+
+    @GetMapping("/top/mentors")
+    public ResponseEntity<?> getTopMentors(@RequestParam(defaultValue = "10") int limit){
+        List<TopMentorResponse> response = bookingQueryService.getTopMentors(limit);
+        BaseResponseAPI<List<TopMentorResponse>> responseAPI = new BaseResponseAPI<>(true,"Get top :"+limit+" mentors successfully",response,null);
         return ResponseEntity.ok(responseAPI);
     }
 

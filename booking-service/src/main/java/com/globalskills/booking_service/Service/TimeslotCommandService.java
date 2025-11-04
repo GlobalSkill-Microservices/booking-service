@@ -36,6 +36,8 @@ public class TimeslotCommandService {
     public TimeslotResponse createByTeacher(Long accountId, TimeslotRequest request){
         Timeslot timeslot = modelMapper.map(request,Timeslot.class);
         Calendar calendar = calendarQueryService.findByAccountId(accountId);
+        timeslot.setTitle(request.getTitle());
+        timeslot.setLanguage(request.getLanguage());
         timeslot.setLinkUrlRoom(request.getLinkUrlRoom());
         timeslot.setSlotStatus(SlotStatus.AVAILABLE);
         timeslot.setCalendar(calendar);
@@ -51,6 +53,8 @@ public class TimeslotCommandService {
 
     public TimeslotResponse updateByTeacher(Long id, TimeslotRequest request){
         Timeslot oldTimeslot = timeslotQueryService.findById(id);
+        oldTimeslot.setTitle(request.getTitle());
+        oldTimeslot.setLanguage(request.getLanguage());
         oldTimeslot.setLinkUrlRoom(request.getLinkUrlRoom());
         oldTimeslot.setSlotDate(request.getSlotDate());
         oldTimeslot.setStartTime(request.getStartTime());

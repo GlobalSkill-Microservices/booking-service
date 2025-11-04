@@ -40,7 +40,7 @@ public class CalendarController {
             @Parameter(hidden = true)
             @RequestHeader(value = "X-User-ID",required = false) Long accountId
     ){
-        PageResponse<CalendarResponse> response = calendarQueryService.getbyAccount(page, size, sortBy, sortDir, accountId);
+        PageResponse<CalendarResponse> response = calendarQueryService.getByAccount(page, size, sortBy, sortDir, accountId);
         BaseResponseAPI<PageResponse<CalendarResponse>> responseAPI = new BaseResponseAPI<>(true,"Get calendar successfully",response,null);
         return ResponseEntity.ok(responseAPI);
     }
@@ -54,7 +54,7 @@ public class CalendarController {
             @RequestParam(defaultValue = "desc") String sortDir,
             @PathVariable Long accountId
     ){
-        PageResponse<CalendarResponse> response = calendarQueryService.getbyAccount(page, size, sortBy, sortDir, accountId);
+        PageResponse<CalendarResponse> response = calendarQueryService.getByAccount(page, size, sortBy, sortDir, accountId);
         BaseResponseAPI<PageResponse<CalendarResponse>> responseAPI = new BaseResponseAPI<>(true,"Get calendar successfully",response,null);
         return ResponseEntity.ok(responseAPI);
     }
