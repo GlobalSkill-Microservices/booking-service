@@ -24,7 +24,7 @@ public interface BookingRepo extends JpaRepository<Booking,Long> {
     @Query(value = """
     SELECT b.mentor.id AS mentorId,
            COUNT(*) AS confirmedCount
-    FROM bookings b
+    FROM booking b
     WHERE b.bookingStatus = 'CONFIRMED'
     GROUP BY b.mentor.id
     ORDER BY confirmedCount DESC
