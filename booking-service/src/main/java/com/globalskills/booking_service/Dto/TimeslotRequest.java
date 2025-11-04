@@ -16,6 +16,10 @@ import java.time.LocalTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TimeslotRequest {
 
+    String language;
+
+    String title;
+
     LocalDate slotDate;
 
     LocalTime startTime;

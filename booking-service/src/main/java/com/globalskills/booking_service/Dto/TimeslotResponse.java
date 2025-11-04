@@ -19,6 +19,10 @@ public class TimeslotResponse {
 
     Long id;
 
+    String language;
+
+    String title;
+
     SlotStatus slotStatus;
 
     LocalDate slotDate;
