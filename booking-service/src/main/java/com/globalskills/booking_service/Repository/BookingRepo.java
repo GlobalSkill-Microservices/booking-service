@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -31,6 +32,8 @@ public interface BookingRepo extends JpaRepository<Booking,Long> {
     LIMIT :limit
 """, nativeQuery = true)
     List<TopMentorProjection> findTopMentors(@Param("limit") int limit);
+
+    List<Booking> findByBookingStatusAndCreatedAtBefore(BookingStatus status, Instant expiryTime);
 
 
 }

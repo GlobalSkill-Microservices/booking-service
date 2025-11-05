@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Data
@@ -28,5 +31,9 @@ public class Booking {
     @OneToOne
     @JoinColumn(name = "timeslot_id", unique = true, nullable = false)
     Timeslot timeslot;
+
+    @CreationTimestamp
+    @Column(nullable = true, updatable = false)
+    Instant createdAt;
 
 }
